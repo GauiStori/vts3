@@ -53,7 +53,6 @@ namespace NetworkSniffer {
 #define max_confirmed_services   30  // through GetEventInformation, 135-2012 (rev 14)
 #define max_unconfirmed_services 11  // through WriteGroup, 135-2012 (rev 14)
 
-#define FW "-27"
 #define ARC 0
 
 static char outstr[880]; /* buffer for output string manipulation */
@@ -966,7 +965,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
       DERmask = (buff & 0x04)>>2;     /* data expecting reply mask */
 
       /*  ----- show control octet  ------  */
-      sprintf(outstr,"%"FW"s = X'%%02X'","Network Control Octet");
+      sprintf(outstr,"%" STR(FW) "s = X'%%02X'","Network Control Octet");
       bac_show_flag(outstr,0xFF);
       pif_show_flagbit(0x80,"BACnet Network Control Message", "BACnet APDU");
       pif_show_flagbit(0x40,"Reserved","Reserved");
@@ -1062,26 +1061,26 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
             case 0x00:  /* Who-Is-Router-To-Network */
                         pif_show_byte("Message Type                = %u  Who-Is-Router-To-Network");
                         if(pif_offset < pif_end_offset) {   /* network address present */
-                           sprintf(outstr,"%"FW"s = %%u","Network Number");
+                           sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                            pif_show_word_hl(outstr);
                         }
                         break;
             case 0x01:  /*  I-Am-Router-To-Network  */
                         pif_show_byte("Message Type                = %u  I-Am-Router-To-Network");
                         while(pif_offset < pif_end_offset) { /* display network numbers */
-                           sprintf(outstr,"%"FW"s = %%u","Network Number");
+                           sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                            pif_show_word_hl(outstr);
                         }
                         break;
             case 0x02:  /*  I-Could-Be-Router-To-Network  */
                         pif_show_byte("Message Type                = %u  I-Could-Be-Router-To-Network");
-                        sprintf(outstr,"%"FW"s = %%u","Network Number");
+                        sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                         pif_show_word_hl(outstr);
                         pif_show_byte("Performance Index           = %u");
                         break;
             case 0x03:  /* Reject-Message-To-Network */
                         pif_show_byte("Message Type                = %u  Reject-Message-To-Network");
-                        sprintf(outstr,"%"FW"s = X'%%02X'","Reject Reason");
+                        sprintf(outstr,"%" STR(FW) "s = X'%%02X'","Reject Reason");
                         bac_show_flag(outstr,0xFF);
                         pif_show_flagmask(0x07, 0x00, "Other");
                         pif_show_flagmask(0x07, 0x01, "Unknown DNET");
@@ -1096,7 +1095,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                         pif_show_byte("Message Type                = %u  Router-Busy-To-Network");
                         if (length > 3) {   /* DNET included */
                            while(pif_offset < pif_end_offset) { /* display net numbers */
-                              sprintf(outstr,"%"FW"s = %%u","Network Number");
+                              sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                               pif_show_word_hl(outstr);
                            }
                         }
@@ -1108,7 +1107,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                         pif_show_byte("Message Type                = %u  Router-Available-To-Network");
                         if (length > 3) {   /* DNET included */
                            while(pif_offset < pif_end_offset) { /* display net numbers */
-                              sprintf(outstr,"%"FW"s = %%u","Network Number");
+                              sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                               pif_show_word_hl(outstr);
                            }
                         }
@@ -1125,7 +1124,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                         }
                         else {
                            while(pif_offset < pif_end_offset) { /* process data */
-                              sprintf(outstr,"%"FW"s = %%u","Connected DNET");
+                              sprintf(outstr,"%" STR(FW) "s = %%u","Connected DNET");
                               pif_show_word_hl(outstr);
                               port_id = pif_get_byte(0);
                               if(port_id == 0)
@@ -1147,7 +1146,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                         else {
                            pif_show_byte("Number of Ports             = %u");
                            while(pif_offset < pif_end_offset) { /* process data */
-                              sprintf(outstr,"%"FW"s = %%u","Connected DNET");
+                              sprintf(outstr,"%" STR(FW) "s = %%u","Connected DNET");
                               pif_show_word_hl(outstr);
                               pif_show_byte("Port ID Number              = %u");
                               port_info_length = pif_get_byte(0);
@@ -1158,7 +1157,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                         break;
             case 0x08:  /* Establish-Connection-To-Network */
                         pif_show_byte("Message Type                = %u  Establish-Connection-To-Network");
-                        sprintf(outstr,"%"FW"s = %%u","Network Number");
+                        sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                         pif_show_word_hl(outstr);
                         if(pif_get_byte(0) == 0)
                            pif_show_byte("Permanent Connection");
@@ -1167,7 +1166,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                         break;
             case 0x09:  /* Disconnect-Connection-To-Network */
                         pif_show_byte("Message Type                = %u  Disconnect-Connection-To-Network");
-                        sprintf(outstr,"%"FW"s = %%u","Network Number");
+                        sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                         pif_show_word_hl(outstr);
                         break;
 
@@ -1201,7 +1200,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                         break;
             case 0x13:  /* Network-Number-Is*/
                         pif_show_byte(   "Message Type                = %u  Network-Number-Is");
-                        sprintf(outstr,"%"FW"s = %%u","Network Number");
+                        sprintf(outstr,"%" STR(FW) "s = %%u","Network Number");
                         pif_show_word_hl(outstr);
                         if(pif_get_byte(0) == 0)
                            pif_show_byte("Learned:                      %u");
@@ -1209,7 +1208,7 @@ int interp_bacnet_NL( char *header, int length)  /* Network Layer interpreter */
                            pif_show_byte("Configured:                   %u");
                         break;
             default:    // Show type from table, or "Unknown..." for values not in the table
-                        sprintf(outstr,"%"FW"s = %%u", 
+                        sprintf(outstr,"%" STR(FW) "s = %%u",
                                 BAC_STRTAB_NL_msgs.EnumString( buff, "Unknown network message type:" ));
                         pif_show_byte(outstr);
                         break;
@@ -2127,14 +2126,14 @@ void show_confirmed( unsigned char x )
 
    /* --- display the confirmed service header detail --- */
 
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x00,"BACnet-Confirmed-Request-PDU");
    pif_show_flagbit(0x08,"Segmented Message","Unsegmented Message");
    pif_show_flagbit(0x04,"More Follows","No More Follows");
    pif_show_flagbit(0x03,"Segmented Resp Accepted","Segmented Resp not Accepted");
    
-   sprintf(outstr,"%"FW"s = X'%%02X'","MaxSegments/MaxResponse");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","MaxSegments/MaxResponse");
    bac_show_flag(outstr,0xFF);
 
    pif_show_flagmask(0x70, 0x00,"Unspecified number of segments accepted");
@@ -2234,7 +2233,7 @@ void show_unconfirmed( unsigned char )
       break;
    }                                                                       //  ***002 end
 
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x10,"BACnet-Unconfirmed-Request-PDU");
    pif_show_flagbit(0x0F,"Unused",NULL);
@@ -2251,7 +2250,7 @@ void show_unconfirmed( unsigned char )
 void show_simple_ack( unsigned char )
 /**************************************************************************/
 {
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x20,"BACnet-SimpleACK-PDU");
    pif_show_flagbit(0x0F,"Unused",NULL);
@@ -2287,7 +2286,7 @@ void show_complex_ack( unsigned char x )
      0,0,
      show_getEventInformationACK    /* 29 Added by Zhu Zhenhua, 2004-5-25*/
    };
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x30,"BACnet-ComplexACK-PDU");
    pif_show_flagbit(0x08,"Segmented Message","Unsegmented Message");
@@ -2323,7 +2322,7 @@ void show_complex_ack( unsigned char x )
 void show_segment_ack( unsigned char )
 /*************************************************************************/
 {
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x40,"BACnet-SegmentACK-PDU");
    pif_show_flagbit(0x0e,"Unused",NULL);
@@ -2370,7 +2369,7 @@ void show_error( unsigned char x )
       show_error_codes,  //28 subscribe COV
       show_error_codes   //29 get event info
    };
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x50,"BACnet-Error-PDU");
    pif_show_flagbit(0x0F,"Unused",NULL);
@@ -2408,13 +2407,13 @@ void show_error( unsigned char x )
 void show_reject( unsigned char )
 /**************************************************************************/
 {
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x60,"BACnet-Reject-PDU");
    pif_show_flagbit(0x0F,"Unused",NULL);
    
    bac_show_byte("Original Invoke ID","%d");
-   sprintf(outstr,"%"FW"s = %s = (%%u)","Reject Reason",
+   sprintf(outstr,"%" STR(FW) "s = %s = (%%u)","Reject Reason",
            BAC_STRTAB_BACnetReject.EnumString(pif_get_byte(0), "Reject"));
    pif_show_byte(outstr);
 }
@@ -2423,14 +2422,14 @@ void show_reject( unsigned char )
 void show_abort( unsigned char )
 /**************************************************************************/
 {
-   sprintf(outstr,"%"FW"s = X'%%02X'","First Header Octet");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","First Header Octet");
    bac_show_flag(outstr,0xFF);
    pif_show_flagmask(0xF0,0x70,"BACnet-Abort-PDU");
    pif_show_flagbit(0x0E,"Unused",NULL);
    pif_show_flagbit(0x01,"Abort From Server","Abort From Client");
    
    bac_show_byte("Original Invoke ID","%d");
-   sprintf(outstr,"%"FW"s = %s = (%%u)","Abort Reason",
+   sprintf(outstr,"%" STR(FW) "s = %s = (%%u)","Abort Reason",
            BAC_STRTAB_BACnetAbort.EnumString(pif_get_byte(0), "Abort"));
    pif_show_byte(outstr);
 }
@@ -3990,7 +3989,7 @@ void show_bac_bitstring( unsigned int len )
    
    /* the tag should be displayed before calling this function */
    bac_show_byte("Number of unused bits","%u");
-   sprintf(outstr,"%"FW"s = X'%%02X'","Bitstring Values");
+   sprintf(outstr,"%" STR(FW) "s = X'%%02X'","Bitstring Values");
    for (i=0; i<len-1; i++) {
       bac_show_flag(outstr,0xFF);
       pif_show_flagbit(0x80,"","");
@@ -4072,32 +4071,32 @@ void show_bac_charstring( unsigned int len)
    switch(charset){
       case 0: /* ASCII */
              bac_show_byte("ASCII/UTF-8 Character Encoding","%u");
-             sprintf(outstr,"%"FW"s = %%s","Character string");
+             sprintf(outstr,"%" STR(FW) "s = %%s","Character string");
              pif_show_ascii(len-1, outstr);
              break;
       case 1: /* MS DBCS */
              bac_show_byte("MS Double Byte Character Encoding","%u");
-             sprintf(outstr,"%"FW"s = X'%%s'","Character string");
+             sprintf(outstr,"%" STR(FW) "s = X'%%s'","Character string");
              pif_show_nbytes_hex(outstr, len-1);
              break;
       case 2: /* JIS C 6226 */
              bac_show_byte("JIS X 0208","%u");
-             sprintf(outstr,"%"FW"s = X'%%s'","Character string");
+             sprintf(outstr,"%" STR(FW) "s = X'%%s'","Character string");
              pif_show_nbytes_hex(outstr, len-1);
              break;
       case 3: /* ISO 10646(UCS-4) */
              bac_show_byte("ISO 10646(UCS-4)","%u");
-             sprintf(outstr,"%"FW"s = X'%%s'","Character string");
+             sprintf(outstr,"%" STR(FW) "s = X'%%s'","Character string");
              pif_show_nbytes_hex(outstr, len-1);
              break;
       case 4: /* ISO 10646(UCS-2) */
              bac_show_byte("ISO 10646(UCS-2)","%u");
-             sprintf(outstr,"%"FW"s = X'%%s'","Character string");
+             sprintf(outstr,"%" STR(FW) "s = X'%%s'","Character string");
              pif_show_nbytes_hex(outstr, len-1);
              break;
       case 5: /* ISO 8859-1 */
              bac_show_byte("ISO 8859-1","%u");
-             sprintf(outstr,"%"FW"s = X'%%s'","Character string");
+             sprintf(outstr,"%" STR(FW) "s = X'%%s'","Character string");
              pif_show_nbytes_hex(outstr, len-1);
              break;
       default:  /* invalid character set */
@@ -4109,7 +4108,7 @@ void show_bac_charstring( unsigned int len)
 void show_bac_octetstring( unsigned int len )
 /**************************************************************************/
 {
-   sprintf(outstr,"%"FW"s = X'%%s'","Octet string");
+   sprintf(outstr,"%" STR(FW) "s = X'%%s'","Octet string");
    pif_show_nbytes_hex(outstr,len);
 }
 
@@ -4247,7 +4246,7 @@ void show_bac_double( unsigned int len )
 #endif
    dx = *(double*)fstr;
 
-   sprintf(outstr,"%"FW"s = %%s","Value of double");
+   sprintf(outstr,"%" STR(FW) "s = %%s","Value of double");
    sprintf(get_int_line(pi_data_current,pif_offset,8),outstr,DoubleToString(dStr,dx));
    pif_offset += 8;
 }
@@ -4277,7 +4276,7 @@ void show_bac_real( unsigned int len )
    fx = *(float *)fstr;
 
    // We use FloatToString() to get nice treatment of NaN and inf
-   sprintf(outstr,"%"FW"s = %%s","Value of float");
+   sprintf(outstr,"%" STR(FW) "s = %%s","Value of float");
    sprintf(get_int_line(pi_data_current,pif_offset,4),outstr,FloatToString(fStr,fx));
    pif_offset += 4;
 }
@@ -4298,7 +4297,7 @@ void show_bac_signed ( unsigned int len )
       val = (val << 8) | pif_get_byte(ix);
    }
 
-   sprintf(outstr,"%"FW"s = %%d", "Value (%u-octet signed)");
+   sprintf(outstr,"%" STR(FW) "s = %%d","Value (%u-octet signed)");
 
    // get a detail line
    sprintf( get_int_line( pif_pi, pif_offset, len ), outstr, len, val );
@@ -4361,7 +4360,7 @@ void show_bac_unsigned( unsigned int len )
 /**************************************************************************/
 {
    unsigned int value = get_bac_unsigned( 0, len );
-   sprintf(outstr, "%"FW"s (%u-octet unsigned) = %%u", "Value", len);
+   sprintf(outstr, "%" STR(FW) "s (%u-octet unsigned) = %%u","Value", len);
    if (len <= 4)
    {
       sprintf(get_int_line(pi_data_current,pif_offset,len),outstr, value);
@@ -4375,7 +4374,7 @@ void show_bac_enumerated( unsigned int len )
 /**************************************************************************/
 {
    unsigned int value = get_bac_unsigned( 0, len );
-   sprintf(outstr, "%"FW"s (%u-octet enumeration) = %%u", "Value", len);
+   sprintf(outstr, "%" STR(FW) "s (%u-octet enumeration) = %%u","Value", len);
    if (len <= 4)
    {
       sprintf(get_int_line(pi_data_current,pif_offset,len),outstr, value);
@@ -4436,7 +4435,7 @@ unsigned int show_tagged_data( bool showData )
    if (contextTag)
    {
       // Context tag
-      sprintf( outstr,"%"FW"s = X'%%02X'",
+      sprintf( outstr,"%" STR(FW) "s = X'%%02X'",
              (len == 6) ? "Opening Context Tag" : 
              (len == 7) ? "Closing Context Tag" : 
              "SD Context Tag" );
@@ -4450,7 +4449,7 @@ unsigned int show_tagged_data( bool showData )
    else
    {
       // Application tag
-      sprintf(outstr,"%"FW"s = X'%%02X'","Application Tag");
+      sprintf(outstr,"%" STR(FW) "s = X'%%02X'","Application Tag");
       bac_show_flag(outstr,0xFF);      // Show tag byte, advance cursor
       
       pif_show_flagmask(0xF0,0x00,"Null");
@@ -4506,14 +4505,14 @@ unsigned int show_tagged_data( bool showData )
       case 254: 
          pif_show_byte("Length in next 2 octets");
          len = pif_get_word_hl(0);
-         sprintf(outstr,"%"FW"s = %%u","Length of data");
+         sprintf(outstr,"%" STR(FW) "s = %%u","Length of data");
          pif_show_word_hl(outstr);
          break;
          
       case 255: 
          pif_show_byte("Length in next 4 octets");
          len = pif_get_long_hl(0);
-         sprintf(outstr,"%"FW"s = %%lu","Length of data");
+         sprintf(outstr,"%" STR(FW) "s = %%lu","Length of data");
          pif_show_long_hl(outstr);
          break;
          
@@ -4548,14 +4547,14 @@ unsigned int show_tagged_data( bool showData )
          case PRIM_BIT_STRING:
             // This doesn't add anything useful, so just show the hex
             // show_bac_bitstring(len);
-            sprintf(outstr,"%"FW"s = %%s","Bit string");
+            sprintf(outstr,"%" STR(FW) "s = %%s","Bit string");
             pif_show_nbytes_hex(outstr,len);
             break;
          case PRIM_CHARACTER_STRING:
             show_bac_charstring(len);
             break;
          case PRIM_OCTET_STRING:
-            sprintf(outstr,"%"FW"s = X'%%s'","Octet string");
+            sprintf(outstr,"%" STR(FW) "s = X'%%s'","Octet string");
             pif_show_nbytes_hex(outstr,len);
             break;
          case PRIM_ENUMERATED:
@@ -4571,7 +4570,7 @@ unsigned int show_tagged_data( bool showData )
             show_bac_object_identifier(len);
             break;
          default:       /* non-standard */
-            sprintf(outstr,"%"FW"s = X'%%s'","Unknown Type: ");
+            sprintf(outstr,"%" STR(FW) "s = X'%%s'","Unknown Type: ");
             pif_show_nbytes_hex(outstr, len);
          }  /* end of type switch */
       }
@@ -4581,7 +4580,7 @@ unsigned int show_tagged_data( bool showData )
          if (!pairedTag) {
             if (len > 0) {
                // Don't know what this really is, so show hex bytes
-               sprintf(outstr,"%"FW"s = X'%%s'", "tagged data: " );
+               sprintf(outstr,"%" STR(FW) "s = X'%%s'","tagged data: " );
                pif_show_nbytes_hex(outstr, len);
             }
          }

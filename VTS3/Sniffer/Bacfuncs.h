@@ -5,6 +5,10 @@
 // Revision: March 5 2010: rewrote most of it.
 /**************************************************************************/
 
+#define STR_HELPER(x) #x
+#define STR(x) STR_HELPER(x)
+#define FW -27
+
 // Parse BACnet tags
 class BacParser
 {
@@ -1257,7 +1261,7 @@ bool BACnetSequence::BitString( int theTag, const char *pTitle,
       // Show the byte data (after unused-bits)
       pif_offset += 1;
       byteLength -= 1;
-      sprintf(outstr,"%"FW"s = %%s","Bit string data");
+      sprintf(outstr,"%" STR(FW) "s = %%s","Bit string data");
       pif_show_nbytes_hex(outstr, byteLength);
 
       if (pTheTable != NULL)
@@ -1381,7 +1385,7 @@ void bac_show_byte( const char *label, const char *format_str )
 /*************************************************************************/
 /* Advantage: Allows FW alignment */
 {
-   sprintf(outstr,"%"FW"s = ",label); /* Set up alignment of output */
+   sprintf(outstr,"%*s = %%s", FW,label); /* Set up alignment of output */
    strcat(outstr,format_str);
    sprintf(get_int_line(pi_data_current,pif_offset,1),outstr,(unsigned char)pif_get_byte(0));
    pif_offset += 1;
@@ -1402,8 +1406,7 @@ void bac_show_enetaddr( const char *label )
       name = LookupName( 0, 0, 0 );
    else
       name = LookupName( 0, addr, 6 );
-
-   sprintf(outstr,"%"FW"s = %%02X-%%02X-%%02X-%%02X-%%02X-%%02X",label); /* Set up alignment of output */
+   sprintf(outstr, "%" STR(FW) "s = %%02X-%%02X-%%02X-%%02X-%%02X-%%02X",label); /* Set up alignment of output */
    sprintf(get_int_line(pi_data_current,pif_offset,6), outstr
            , pif_get_byte(0)
            , pif_get_byte(1)
@@ -1423,7 +1426,7 @@ void bac_show_bipaddr( const char *label )
 {
    const char  *name = LookupName( 0, (const unsigned char *)msg_origin + pif_offset, 6 );
 
-   sprintf(outstr,"%"FW"s = %%u.%%u.%%u.%%u:0x%%04X",label); /* Set up alignment of output */
+   sprintf(outstr,"%" STR(FW) "s = %%u.%%u.%%u.%%u:0x%%04X",label); /* Set up alignment of output */
    sprintf(get_int_line(pi_data_current,pif_offset,6), outstr
            , pif_get_byte(0)
            , pif_get_byte(1)
@@ -1469,9 +1472,9 @@ void bac_show_word_hl( const char *label, const char *format_str )
 /*************************************************************************/
 /* Advantage: Allows FW alignment */
 {
-  sprintf(outstr,"%"FW"s = ",label); /* Set up alignment of output */
-  strcat(outstr,format_str);
-  sprintf(get_int_line(pi_data_current,pif_offset,2),outstr,
+  sprintf(outstr,"%" STR(FW) "s = %%s",label); /* Set up alignment of output */
+  strcat(outstr,format_str); 
+  sprintf(get_int_line(pi_data_current, pif_offset, 2), outstr,"", // FIXME Added "" or remove %%s, fixes a crash
           pif_get_word_hl(0));
   pif_offset += 2;
 }
@@ -1481,7 +1484,7 @@ void bac_show_long_hl( const char *label, const char *format_str )
 /*************************************************************************/
 /* Advantage: Allows FW alignment */
 {
-  sprintf(outstr,"%"FW"s = ",label); /* Set up alignment of output */
+  sprintf(outstr,"%" STR(FW) "s = %%s",label); /* Set up alignment of output */
   strcat(outstr,format_str);
   sprintf(get_int_line(pi_data_current,pif_offset,4),outstr,
           pif_get_long_hl(0));
@@ -1493,7 +1496,7 @@ void show_str_eq_str ( const char *str1, const char *str2, unsigned int len )
 /*************************************************************************/
 {
   sprintf(get_int_line(pi_data_current,pif_offset,len),
-          "%"FW"s = %s",str1,str2);
+          "%" STR(FW) "s = %s",str1,str2);
 }
 
 /*************************************************************************/
